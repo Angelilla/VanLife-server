@@ -7,6 +7,7 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 const User = require("../models/User");
+const Trip = require("../models/Trip");
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -67,5 +68,38 @@ router.post('/delete-profile', isLoggedIn(), (req, res, next) => {
           console.log(error);
       });
 });
+
+router.post('/new-trip', isLoggedIn(), (req, res, next) => {
+    
+    const { name, traveler, initdate } = req.body;
+    const currUser = req.session.currentUser._id;
+  
+    Trip
+      .create({ name, traveler, initdate })
+      .then(newTrip => {
+  
+        console.log(newTrip)
+        res.json(newTrip) 
+  
+        const tripId = newTrip._id;
+        User.findByIdAndUpdate(
+          currUser,
+          { $push: { createdtrips: tripId} },
+          { new: true }
+        )
+        .then((user) => {
+          console.log(user);
+          res.json(user)
+        })
+        .catch(error => {
+          console.log(error);
+        });
+  
+      })
+      //.status(200)
+      .catch(error => {
+        console.log('Error while create the trip: ', error);
+      });
+  })
 
 module.exports = router;

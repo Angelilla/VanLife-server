@@ -6,39 +6,35 @@ const { isLoggedIn } = require("../helpers/middlewares");
 const User = require('../models/User');
 const Trip = require('../models/Trip');
 
-router.post('/new-trip', isLoggedIn(), (req, res, next) => {
+
+
+router.get('/:id', (req, res, next) => {
     
-  const { name, traveler, initdate } = req.body;
-  const currUser = req.session.currentUser._id;
-
   Trip
-    .create({ name, traveler, initdate })
-    .then(newTrip => {
-
-      console.log(newTrip)
-      res.json(newTrip) 
-
-      const tripId = newTrip._id;
-      User.findByIdAndUpdate(
-        currUser,
-        { $push: { createdtrips: tripId} },
-        { new: true }
-      )
-      .then((user) => {
-        console.log(user);
-        res.json(user)
+      .findById(req.params.id)
+      .populate('comments.creator traveler followers')
+      .then(tripDetail => {
+          console.log(tripDetail);
+          res.json( tripDetail)
+              
       })
       .catch(error => {
-        console.log(error);
+      console.log(error);
       });
+  
+});
 
+router.get('/', (req, res, next) => {
+
+  Trip
+    .find()
+    .then(allTrips => {
+      res.json(allTrips).status(200)
     })
-    //.status(200)
-    
-    
     .catch(error => {
-      console.log('Error while create the trip: ', error);
+      console.log(error);
     });
+
 })
 
 router.put('/:id/edit', isLoggedIn(), (req, res, next) => {
