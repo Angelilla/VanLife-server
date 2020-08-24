@@ -16,7 +16,7 @@ router.post('/new-trip', isLoggedIn(), (req, res, next) => {
     .then(newTrip => {
 
       console.log(newTrip)
-      
+      res.json(newTrip) 
 
       const tripId = newTrip._id;
       User.findByIdAndUpdate(
@@ -34,14 +34,14 @@ router.post('/new-trip', isLoggedIn(), (req, res, next) => {
 
     })
     //.status(200)
-    res.json(newTrip) 
+    
     
     .catch(error => {
       console.log('Error while create the trip: ', error);
     });
 })
 
-router.post('/:id/edit', isLoggedIn(), (req, res, next) => {
+router.put('/:id/edit', isLoggedIn(), (req, res, next) => {
   
   const { name, initdate } = req.body;
 

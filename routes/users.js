@@ -28,7 +28,7 @@ router.get('/profile', isLoggedIn(), (req, res, next) => {
       });
 });
 
-router.post('/edit-profile', isLoggedIn(), (req, res, next) => {
+router.put('/edit-profile', isLoggedIn(), (req, res, next) => {
     
   const currUser = req.session.currentUser._id;
   console.log(currUser)
