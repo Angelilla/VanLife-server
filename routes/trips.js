@@ -96,8 +96,7 @@ router.post('/:id/add-favourite',  (req, res, params) => {
       { new: true })
     .then(favouriteTrip => {
 
-      console.log(favouriteTrip)
-
+      //console.log(favouriteTrip)
       User
         .findByIdAndUpdate(
         userId,
@@ -132,9 +131,7 @@ router.post('/:id/delete-favourite',  (req, res, params) => {
     )
     .then(favouriteTrip => {
 
-      console.log(favouriteTrip)
-      
-      
+      //console.log(favouriteTrip)
       User
         .findByIdAndUpdate(
           userId,
