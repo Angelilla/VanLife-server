@@ -37,7 +37,7 @@ router.get('/', (req, res, next) => {
 
 })
 
-router.put('/:id/edit', isLoggedIn(), (req, res, next) => {
+router.put('/:id/edit', (req, res, next) => {
   
   const { name, initdate } = req.body;
 
@@ -56,7 +56,7 @@ router.put('/:id/edit', isLoggedIn(), (req, res, next) => {
   })
 });
 
-router.post('/:id/delete', isLoggedIn(), (req, res, params) => {
+router.post('/:id/delete',  (req, res, params) => {
 
   const currUser = req.session.currentUser._id;
 
@@ -85,14 +85,14 @@ router.post('/:id/delete', isLoggedIn(), (req, res, params) => {
     });
 });
 
-router.post('/:id/add-favourite', isLoggedIn(), (req, res, params) => {
+router.post('/:id/add-favourite',  (req, res, params) => {
 
-  const currUser = req.session.currentUser._id;
+  const {tripId, userId} = req.body;
 
   Trip
     .findByIdAndUpdate(
       req.params.id,
-      { $push: {followers: currUser} },
+      { $push: {followers: userId} },
       { new: true })
     .then(favouriteTrip => {
 
@@ -100,8 +100,8 @@ router.post('/:id/add-favourite', isLoggedIn(), (req, res, params) => {
 
       User
         .findByIdAndUpdate(
-        currUser,
-        { $push: { favoritetrips: favouriteTrip._id } },
+        userId,
+        { $push: { favoritetrips: tripId } },
         { new: true }
         )
         .then((user) => {
@@ -120,14 +120,14 @@ router.post('/:id/add-favourite', isLoggedIn(), (req, res, params) => {
 
 });
 
-router.post('/:id/delete-favourite', isLoggedIn(), (req, res, params) => {
+router.post('/:id/delete-favourite',  (req, res, params) => {
 
-  const currUser = req.session.currentUser._id;
+  const {tripId, userId} = req.body;
 
   Trip
     .findByIdAndUpdate(
       req.params.id, 
-      { $pull: {followers: currUser} },
+      { $pull: {followers: userId} },
       { new: true }
     )
     .then(favouriteTrip => {
@@ -137,8 +137,8 @@ router.post('/:id/delete-favourite', isLoggedIn(), (req, res, params) => {
       
       User
         .findByIdAndUpdate(
-          currUser,
-          { $pull: { favoritetrips: favouriteTrip._id } },
+          userId,
+          { $pull: { favoritetrips: tripId } },
           { new: true }
         )
         .then((user) => {
@@ -158,7 +158,7 @@ router.post('/:id/delete-favourite', isLoggedIn(), (req, res, params) => {
 
 });
 
-router.post('/:id/review', isLoggedIn(), (req, res, params) => {
+router.post('/:id/review',  (req, res, params) => {
 
   const currUser = req.session.currentUser._id;
   const { review } = req.body;
