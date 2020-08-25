@@ -14,7 +14,7 @@ router.get('/:id', (req, res, next) => {
       .findById(req.params.id)
       .populate('comments.creator traveler followers')
       .then(tripDetail => {
-          console.log(tripDetail);
+          //console.log(tripDetail);
           res.json( tripDetail)
               
       })

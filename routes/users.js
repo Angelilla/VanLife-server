@@ -63,7 +63,7 @@ router.post('/delete-profile', isLoggedIn(), (req, res, next) => {
 
   User
       .findByIdAndDelete(currUser)
-      //.then(() => res.json(response))
+      .then(req.session.destroy())
       .catch(error => {
           console.log(error);
       });
