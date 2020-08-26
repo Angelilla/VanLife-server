@@ -48,7 +48,7 @@ router.patch('/update-photo', (req, res, next) => {
 router.post('/:id/update-gallery', (req, res, next) => {
 
   const { gallery } = req.body;
-  console.log(req.params.id)
+  //console.log("hola ", req.params.id)
   Trip
     .findByIdAndUpdate(
       req.params.id,
@@ -57,7 +57,7 @@ router.post('/:id/update-gallery', (req, res, next) => {
     )
     .then( trip => {
       //res.json(trip)
-      console.log(trip)
+      console.log("trip ", trip)
     })
     .catch(error => {
       console.log('Error while retrieving details: ', error);
